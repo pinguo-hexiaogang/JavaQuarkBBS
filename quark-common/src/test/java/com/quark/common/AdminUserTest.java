@@ -22,7 +22,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @EnableCaching//缓存支持
 @SpringBootTest
-public class CommonApplicationTest {
+public class AdminUserTest {
 
     @Autowired
     private DataSource dataSource;
@@ -40,6 +40,7 @@ public class CommonApplicationTest {
     private NotificationDao notificationDao;
     @Autowired
     private AdminUserMapper userMapper;
+
 
     @Test
     public void testFindByUid() {
@@ -97,4 +98,11 @@ public class CommonApplicationTest {
         List<AdminUser> users = userMapper.findAdminUserByPage(1,5);
         assert (users.size() == 5);
     }
+
+    @Test
+    public void testTotalUsers(){
+        int total = userMapper.totalAdminUsers();
+        assert (total > 0);
+    }
+
 }

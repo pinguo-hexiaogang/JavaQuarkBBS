@@ -3,6 +3,7 @@ package com.quark.admin.service.impl;
 import com.quark.admin.service.AdminUserService;
 import com.quark.admin.service.RoleService;
 import com.quark.admin.utils.PasswordHelper;
+import com.quark.common.dto.PageRaw;
 import com.quark.common.entity.AdminUser;
 import com.quark.common.mapper.AdminUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,15 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public List<AdminUser> findByPage(AdminUser adminUser, int start, int length) {
-        return adminUserMapper.findAdminUserByPage(start,length);
+    public PageRaw<AdminUser> findByPage(AdminUser adminUser, int start, int length) {
+        int total = adminUserMapper.totalAdminUsers();
+        List<AdminUser> pageItems =  adminUserMapper.findAdminUserByPage(start,length);
+        return new PageRaw(total,pageItems,start,length);
+
     }
 
     @Override
     public void saveAdmin(AdminUser entity) {
-        entity.setEnable(1);
         PasswordHelper passwordHelper = new PasswordHelper();
         passwordHelper.encryptPassword(entity);
         adminUserMapper.saveUser(entity);

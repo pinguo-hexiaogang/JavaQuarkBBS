@@ -1,7 +1,9 @@
 package com.quark.admin;
 
+import com.quark.admin.controller.AdminUserController;
 import com.quark.admin.service.*;
 import com.quark.common.dao.AdminUserDao;
+import com.quark.common.entity.AdminUser;
 import com.quark.common.entity.Posts;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,13 +28,13 @@ public class AdminApplicationTest {
     @Autowired
     DataSource dataSource;
 
-    @Autowired(required=true)
+    @Autowired(required = true)
     AdminUserService adminUserService;
 
-    @Autowired(required=true)
+    @Autowired(required = true)
     PermissionService permissionService;
 
-    @Autowired(required=true)
+    @Autowired(required = true)
     RoleService roleService;
 
     @Autowired
@@ -43,33 +45,44 @@ public class AdminApplicationTest {
 
     @Autowired
     PostsService postsService;
+    @Autowired
+    AdminUserController adminUserController;
 
     @Test
     public void testDataSource() {
-       System.out.println(dao.findOne(3));
+        System.out.println(dao.findOne(3));
 
     }
 
 
-
     @Test
-    public void testRole(){
+    public void testRole() {
 //        AdminUser user1 = new AdminUser();
 //        AdminUser user2 = new AdminUser();
 //        AdminUser user3 = new AdminUser();
 //        user1.setId(11);
 //        user2.setId(12);
 //        user3.setId(13);
-        adminUserService.saveAdminEnable(new Integer[]{11,12,13});
+        adminUserService.saveAdminEnable(new Integer[]{11, 12, 13});
     }
 
     @Test
-    public void testPosts(){
+    public void testPosts() {
         Posts posts = new Posts();
 //        posts.setId(1);
         posts.setTitle("测试");
         posts.setUser(userService.findOne(2));
         Page<Posts> page = postsService.findByPage(posts, 0, 10);
         System.out.println(page.getContent());
+    }
+
+    @Test
+    public void testAddAdminUser() {
+        AdminUser user = new AdminUser();
+        user.setEnable(1);
+        user.setPassword("11111");
+        user.setUsername("中海");
+        adminUserController.addAdmin(user);
+        assert (adminUserService.findByUserName("中海") != null);
     }
 }

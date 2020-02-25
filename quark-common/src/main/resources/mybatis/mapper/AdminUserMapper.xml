@@ -99,4 +99,11 @@
             #{item}
         </foreach>
     </delete>
+    <insert id="saveUser">
+        insert into quark_adminuser(enable,password,username)
+        values(#{user.enable},#{user.password},#{user.username})
+    </insert>
+    <select id="totalAdminUsers" resultType="int">
+        select count(id) from quark_adminuser;
+    </select>
 </mapper>

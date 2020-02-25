@@ -16,9 +16,7 @@ public interface AdminUserMapper {
 
     AdminUser findByUid(@Param("id") int id);
 
-    @Insert("insert into quark_adminuser(enable,username,password) values" +
-            "(#{enable},#{username},#{password}))")
-    void saveUser(AdminUser user);
+    void saveUser(@Param("user") AdminUser user);
 
     List<AdminUser> findByIds(@Param("ids") Integer[] ids);
 
@@ -31,4 +29,6 @@ public interface AdminUserMapper {
     List<AdminUser> findAdminUserByPage(@Param("start") int start,@Param("length") int length);
 
     void deleteUserByIds(@Param("userIds") Integer[] ids);
+
+    int totalAdminUsers();
 }

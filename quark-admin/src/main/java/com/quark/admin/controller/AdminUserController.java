@@ -2,6 +2,7 @@ package com.quark.admin.controller;
 
 import com.quark.admin.service.AdminUserService;
 import com.quark.common.base.BaseController;
+import com.quark.common.dto.PageRaw;
 import com.quark.common.dto.PageResult;
 import com.quark.common.dto.QuarkResult;
 import com.quark.common.entity.AdminUser;
@@ -34,17 +35,18 @@ public class AdminUserController extends BaseController {
                              @RequestParam(required = false, defaultValue = "1") int start,
                              @RequestParam(required = false, defaultValue = "10") int length) {
         int pageNo = start / length;
-        List<AdminUser> page = adminUserService.findByPage(adminUser, start, length);
+        PageRaw page = adminUserService.findByPage(adminUser, start, length);
         PageResult<List<AdminUser>> result = new PageResult(
                 draw,
-                (long) page.size(),
-                (long) page.size(),
-                page);
+                (long) page.getTotal(),
+                (long) page.getTotal(),
+                page.getPage());
         return result;
     }
 
     @PostMapping("/add")
     public QuarkResult addAdmin(AdminUser adminUser) {
+        System.out.println("xiaogang:add");
 
         QuarkResult result = restProcessor(() -> {
             if (adminUserService.findByUserName(adminUser.getUsername()) != null)
