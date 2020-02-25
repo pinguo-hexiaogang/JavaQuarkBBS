@@ -1,5 +1,6 @@
 package com.quark.common;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -10,6 +11,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
 @EnableCaching//缓存支持
+@MapperScan(value = { "com.quark.common.mapper" })
 public class CommonApplication {
 
     public static void main(String[] args) {

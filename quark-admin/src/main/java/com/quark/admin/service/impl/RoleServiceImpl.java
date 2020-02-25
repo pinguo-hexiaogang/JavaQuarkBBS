@@ -36,7 +36,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleDao, Role> implements R
 
     @Override
     public QuarkResult findRolesAndSelected(Integer id) {
-        Set<Role> userRole = userService.findOne(id).getRoles();
+        Set<Role> userRole = userService.findByUserId(id).getRoles();
         List<Role> roles = findAll();
         for (Role r: roles) {
             if (userRole.contains(r)) r.setSelected(1);

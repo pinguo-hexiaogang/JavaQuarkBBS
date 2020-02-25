@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/admins")
@@ -33,12 +34,12 @@ public class AdminUserController extends BaseController {
                              @RequestParam(required = false, defaultValue = "1") int start,
                              @RequestParam(required = false, defaultValue = "10") int length) {
         int pageNo = start / length;
-        Page<AdminUser> page = adminUserService.findByPage(adminUser, pageNo, length);
-        PageResult<List<AdminUser>> result = new PageResult<>(
+        List<AdminUser> page = adminUserService.findByPage(adminUser, start, length);
+        PageResult<List<AdminUser>> result = new PageResult(
                 draw,
-                page.getTotalElements(),
-                page.getTotalElements(),
-                page.getContent());
+                (long) page.size(),
+                (long) page.size(),
+                page);
         return result;
     }
 
@@ -59,8 +60,9 @@ public class AdminUserController extends BaseController {
     public QuarkResult deleteAdmin(@RequestParam(value = "id[]") AdminUser[] id) {
 
         QuarkResult result = restProcessor(() -> {
-            List<AdminUser> collect = Arrays.asList(id);
-            adminUserService.deleteInBatch(collect);
+            adminUserService.deleteUserByIds(Stream.of(id).map(user -> {
+                return user.getId();
+            }).toArray(Integer[]::new));
             return QuarkResult.ok();
         });
         return result;
